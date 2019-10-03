@@ -1,7 +1,6 @@
 # batteriesnotincluded
 Building a webstack in Go
 
-
 # install rbenv
 	brew install rbenv
 	rbenv init
@@ -15,6 +14,14 @@ Building a webstack in Go
 	go version
 
 # run benchmarks
+		Ruby 2.6.1
+		Ruby thin.rb   	- 3309.26 [#/sec] (mean)	- ab -k -n 10000 -r http://127.0.0.1:8080/
+		Ruby http.rb 		- 4795.89 [#/sec] (mean)  - ab -k -n 10000 -r http://127.0.0.1:8081/
 
+		Go 1.13.1
+		Go run main.go  - 10726.00 [#/sec] (mean) - ab -k -n 10000 -r http://127.0.0.1:8082/
 
-
+**BE CAREFUL RUNNING YOUR OWN TESTS
+	Notice how I run these on different ports
+	Requests per second:    704.66 [#/sec] (mean) (GO)
+	https://www.ncftp.com/ncftpd/doc/misc/ephemeral_ports.html
