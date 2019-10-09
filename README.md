@@ -15,11 +15,12 @@ Building a webstack in Go
 
 # run benchmarks
 		Ruby 2.6.1
-		Ruby thin.rb   	- 3309.26 [#/sec] (mean)	- ab -k -n 10000 -r http://127.0.0.1:8080/
-		Ruby http.rb 		- 4795.89 [#/sec] (mean)  - ab -k -n 10000 -r http://127.0.0.1:8081/
+		ruby thin.rb   		- 3309.26 [#/sec] (mean)	- ab -k -n 10000 -r http://127.0.0.1:8080/
+		ruby http.rb 			- 4795.89 [#/sec] (mean)  - ab -k -n 10000 -r http://127.0.0.1:8081/
+	 	puma -t 1 puma.ru	- 11490.19 [#/sec] (mean) - ab -k -n 10000 -r http://127.0.0.1:9292/
 
 		Go 1.13.1
-		Go run main.go  - 10726.00 [#/sec] (mean) - ab -k -n 10000 -r http://127.0.0.1:8082/
+		Go run main.go  	- 11976.32 [#/sec] (mean) - ab -k -n 10000 -r http://127.0.0.1:8082/
 
 **BE CAREFUL RUNNING YOUR OWN TESTS
 	Notice how I run these on different ports
