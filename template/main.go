@@ -2,17 +2,11 @@ package main
 
 import (
 	"fmt"
-)
-
-import (
-	"fmt"
 	"html/template"
 	"log"
 	"net/http"
 	"path"
-	"path/filepath"
 	"runtime"
-	"strings"
 )
 
 type App struct{}
@@ -37,9 +31,9 @@ func (a App) Japanese(res http.ResponseWriter, req *http.Request) {
 
 func (a App) Default(res http.ResponseWriter, req *http.Request) {
 
-	templates = append(templates, template.Must(template.ParseFiles(
-		projectDir("views")+"default.html",
-	)))
+	templates = template.Must(template.ParseFiles(
+		projectDir("views") + "default.html",
+	))
 
 	err := templates.ExecuteTemplate(res, "default.html", nil)
 	if err != nil {
