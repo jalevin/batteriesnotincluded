@@ -1,0 +1,8 @@
+{{define "content"}}
+
+	{{range $post:= .}}
+		<h2>{{$post.Title}}</h2>
+		<p>{{$post.Body}}</p>
+	{{end}}
+
+{{end}}

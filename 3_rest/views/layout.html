@@ -1,0 +1,19 @@
+{{ define "layout" }}
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Hello Gophercon!</title>
+		<link rel="stylesheet" type="text/css" href="/assets/styles.css">
+  </head>
+  <body>
+
+		<h1>Hello Gophercon!</h1>
+
+		{{ template "nav" . }}
+
+		<br />
+
+    {{ template "content" . }}
+  </body>
+</html>
+{{ end }}
