@@ -9,6 +9,11 @@
 
 		<h1>Hello Gophercon!</h1>
 
+		{{ if .Flash }} 
+			<div style="background-color: #f8d7da">
+		{{ end }}
+
+
 		{{ template "nav" . }}
 
 		<br />

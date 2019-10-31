@@ -1,13 +1,13 @@
 {{ define "content" }}
-	<form action="/create">
-		<label for="Title">Title</label>
-		<input name="Title" type="text" />
+	<form action="/posts/create" method="post">
+		<label for="title">Title</label>
+		<input name="title" type="text" />
 
 		<br />
 		<br />
 
-		<label for="Body">Body</label>
-		<textarea name="Body" type="text"> </textarea>
+		<label for="body">Body</label>
+		<textarea name="body" type="text"> </textarea>
 
 		<br />
 		<br />

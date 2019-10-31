@@ -1,7 +1,7 @@
 {{define "content"}}
 
-	{{range $post:= .}}
-		<h2>{{$post.Title}}</h2>
+	{{range $post:= .Posts}}
+	<h2><a href="/post/{{ $post.Id }}">{{$post.Title}}</a></h2>
 		<p>{{$post.Body}}</p>
 	{{end}}
 
