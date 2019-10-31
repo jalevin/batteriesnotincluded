@@ -16,8 +16,9 @@ import (
 
 // database connection
 var (
-	ctx context.Context
-	db  *sql.DB
+	ctx   context.Context
+	db    *sql.DB
+	posts []Post
 )
 
 type App struct{}
@@ -197,7 +198,11 @@ func seedDb(db *sql.DB) error {
 		return err
 	}
 
-	sqlStmt = `INSERT INTO posts (title, body) VALUES ("My First Post", "It's short form writing today!");`
+	sqlStmt = `
+		INSERT INTO posts (title, body) VALUES 
+			("My First Post", "It's short form writing today!"),
+			("My Second Post", "Live coding Fail!");
+	`
 	_, err = db.Exec(sqlStmt)
 	if err != nil {
 		log.Printf("%q: %s\n", err, sqlStmt)
