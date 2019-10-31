@@ -1,6 +1,7 @@
 package main
 
 import (
+	"crawshaw.io/sqlite"
 	"fmt"
 	"github.com/julienschmidt/httprouter"
 	"html/template"
