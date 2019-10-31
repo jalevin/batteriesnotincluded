@@ -1,22 +1,31 @@
 package main
 
 import (
-	"crawshaw.io/sqlite"
+	"context"
+	"database/sql"
 	"fmt"
 	"github.com/julienschmidt/httprouter"
+	_ "github.com/mattn/go-sqlite3"
 	"html/template"
 	"log"
 	"net/http"
+	"os"
 	"path"
 	"runtime"
+)
+
+// database connection
+var (
+	ctx context.Context
+	db  *sql.DB
 )
 
 type App struct{}
 
 type Post struct {
-	Id    string `json:"id"`
-	Title string `json:"title"`
-	Body  string `json:"body"`
+	Id    string `db:id`
+	Title string `db:title`
+	Body  string `db:body`
 }
 
 func findPostById(id string) Post {
@@ -28,17 +37,17 @@ func findPostById(id string) Post {
 	return Post{}
 }
 
-var posts = []Post{
-	{
-		Id:    "1",
-		Title: "Hey Gophercon!",
-		Body:  "Welcome to Alaska!",
-	}, {
-		Id:    "2",
-		Title: "It's really warm in Australia",
-		Body:  "This is the first day I've worn pants",
-	},
-}
+//var posts = []Post{
+//{
+//Id:    "1",
+//Title: "Hey Gophercon!",
+//Body:  "Welcome to Alaska!",
+//}, {
+//Id:    "2",
+//Title: "It's really warm in Australia",
+//Body:  "This is the first day I've worn pants",
+//},
+//}
 
 type PageData struct {
 	PageTitle string
@@ -83,16 +92,36 @@ func (a App) Posts(res http.ResponseWriter, req *http.Request, _ httprouter.Para
 
 	// easier to do
 	tmpl := buildView("posts")
+
+	// Loop through rows using only one struct
+	rows, err := db.Query("SELECT * FROM posts")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var p Post
+
+		if err := rows.Scan(&p.Id, &p.Title, &p.Body); err != nil {
+			log.Println(err.Error())
+		}
+
+		posts = append(posts, p)
+	}
+
+	//////
 	pd := PageData{
 		PageTitle: "Hello Gophercon!",
 		Posts:     posts,
 	}
 
 	// easier to understand what's going on??
-	err := tmpl.ExecuteTemplate(res, "layout", pd)
+	err = tmpl.ExecuteTemplate(res, "layout", pd)
 	if err != nil {
 		http.Error(res, err.Error(), http.StatusInternalServerError)
 	}
+
 }
 
 // Handler to new post form
@@ -154,8 +183,50 @@ func (a App) CreatePost(res http.ResponseWriter, req *http.Request, params httpr
 	http.Redirect(res, req, "/post/3", http.StatusFound)
 }
 
+func seedDb(db *sql.DB) error {
+	sqlStmt := `
+		CREATE TABLE posts(
+		 id INTEGER PRIMARY KEY AUTOINCREMENT,
+		 title 					TEXT    NOT NULL,
+		 body 					TEXT
+		);
+	`
+	_, err := db.Exec(sqlStmt)
+	if err != nil {
+		log.Printf("%q: %s\n", err, sqlStmt)
+		return err
+	}
+
+	sqlStmt = `INSERT INTO posts (title, body) VALUES ("My First Post", "It's short form writing today!");`
+	_, err = db.Exec(sqlStmt)
+	if err != nil {
+		log.Printf("%q: %s\n", err, sqlStmt)
+		return err
+	}
+
+	return nil
+}
+
 func main() {
 	var a App
+	var err error
+
+	// DB Setup
+	dbPath := path.Join(projectDir(), "Posts.db")
+	os.Remove(dbPath)
+
+	db, err = sql.Open("sqlite3", dbPath)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer db.Close()
+
+	err = seedDb(db)
+	if err != nil {
+		log.Fatal(err)
+	}
+	// End DB setup
 
 	router := httprouter.New()
 	router.ServeFiles("/assets/*filepath", http.Dir(path.Join(projectDir(), "assets")))

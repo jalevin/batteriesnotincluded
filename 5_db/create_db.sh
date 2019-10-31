@@ -9,4 +9,3 @@ CREATE TABLE posts(
 );
 
 INSERT INTO posts (title, body) VALUES ("My First Post", "It's short form writing today!");
-
