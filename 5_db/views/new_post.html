@@ -1,0 +1,17 @@
+{{ define "content" }}
+	<form action="/posts/create" method="post">
+		<label for="title">Title</label>
+		<input name="title" type="text" />
+
+		<br />
+		<br />
+
+		<label for="body">Body</label>
+		<textarea name="body" type="text"> </textarea>
+
+		<br />
+		<br />
+		
+		<input type="submit" />
+	</form>
+{{ end }}
