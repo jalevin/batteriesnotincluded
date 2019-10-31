@@ -1,0 +1,22 @@
+body {
+	text-align: center;
+}
+
+hr {
+	width: 20%;
+}
+
+form {
+	width: 600px;
+	margin: auto;
+}
+
+textarea{
+	width: 400px;
+	height: 200px;
+}
+
+input[type="text"] {
+	padding: 5px;
+	width: 400px;
+}
